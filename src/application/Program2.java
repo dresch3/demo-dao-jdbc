@@ -15,15 +15,22 @@ public class Program2 {
 		DepartmentDao departmentDao = DaoFactory.createDepartmentDao();
 		
 		
-		
+		/*
 		System.out.println("\n=== TEST 1: department insert ===");
-		Department newDepartment = new Department(11, "Paint");
+		Department newDepartment = new Department(12, "Paint");
 		departmentDao.insert(newDepartment);
 		System.out.println("Inserted! New id = " + newDepartment.getId());
+		*/
 		
 		System.out.println("\n=== TEST 2: department findById ===");
 		Department department = departmentDao.findById(1);
 		System.out.println(department);
+		
+		System.out.println("\n=== TEST 3: department deleteById ===");
+		System.out.println("Enter id for delete test:");
+		int id = sc.nextInt();
+		departmentDao.deleteById(id);
+		System.out.println("Delete completed!");
 		
 		sc.close();
 	}
