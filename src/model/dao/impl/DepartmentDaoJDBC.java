@@ -56,7 +56,24 @@ public class DepartmentDaoJDBC implements DepartmentDao{
 
 	@Override
 	public void update(Department obj) {
-		// TODO Auto-generated method stub
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement( "UPDATE department "
+					+ "SET id= ?, Name= ?  "
+					+ "WHERE Id= ? ",
+					Statement.RETURN_GENERATED_KEYS);
+					
+			st.setInt(1, obj.getId());
+			st.setString(2, obj.getName());
+			
+			st.executeUpdate();
+					
+		} catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+		}
 		
 	}
 
@@ -68,8 +85,34 @@ public class DepartmentDaoJDBC implements DepartmentDao{
 
 	@Override
 	public Department findById(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		
+		try {
+			
+			st = conn.prepareStatement(
+					"SELECT department.* "
+					+ "FROM department "
+					+ "WHERE department.Id = ?");
+			
+			st.setInt(1, id);
+			rs = st.executeQuery();
+			
+			if(rs.next()) {
+				Department obj = new Department();
+				obj.setId(rs.getInt("id"));
+				obj.setName(rs.getString("Name"));
+				return obj;
+			}
+			return null;	
+		}
+		catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
 	}
 
 	@Override
